@@ -10,10 +10,11 @@ import (
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/nanmenkaimak/bookings/internal/config"
+	"github.com/nanmenkaimak/bookings/internal/driver"
 	"github.com/nanmenkaimak/bookings/internal/handlers"
+	"github.com/nanmenkaimak/bookings/internal/helpers"
 	"github.com/nanmenkaimak/bookings/internal/models"
 	"github.com/nanmenkaimak/bookings/internal/render"
-	"github.com/nanmenkaimak/bookings/internal/helpers"
 )
 
 const portNumber = ":8080"
@@ -24,10 +25,11 @@ var infoLog *log.Logger
 var errorLog *log.Logger
 
 func main() {
-	err := run()
+	db, err := run()
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer db.SQL.Close()
 
 	fmt.Println("zhumys istep zhatyr")
 
@@ -40,9 +42,12 @@ func main() {
 	log.Fatal(err)
 }
 
-func run() error {
+func run() (*driver.DB, error) {
 	// what I am going to put in the session
 	gob.Register(models.Reservation{})
+	gob.Register(models.User{})
+	gob.Register(models.Room{})
+	gob.Register(models.Restriction{})
 
 	//change this to true when in production
 	app.InProduction = false
@@ -61,19 +66,31 @@ func run() error {
 
 	app.Session = session
 
+	// connecting to database 
+	log.Println("Connecting to database")
+	content, err := os.ReadFile("file.txt")
+    if err != nil {
+        log.Fatal(err)
+    }
+	db, err := driver.ConnectSQL(string(content))
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println("Connected to database")
+
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
 		log.Fatal("cannot create template cache")
-		return err
+		return nil, err
 	}
 
 	app.TemplateCache = tc
 	app.UseCache = false
 
-	repo := handlers.NewRepo(&app)
+	repo := handlers.NewRepo(&app, db)
 	handlers.NewHandlers(repo)
-	render.NewTemplates(&app)
+	render.NewRenderer(&app)
 	helpers.NewHelpers(&app)
 
-	return nil
+	return db, nil
 }

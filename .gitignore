@@ -1,2 +1,4 @@
 .idea
 database.yml
+coverage.out
+file.txt
