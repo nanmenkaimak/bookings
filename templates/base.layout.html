@@ -13,7 +13,6 @@
         <link rel="stylesheet"
               href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.2/dist/css/datepicker-bs4.min.css">
         <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
         <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
         
     </head>
@@ -52,7 +51,16 @@
                 </li>
                 <li class="nav-item">
                     {{if eq .IsAuthenticated 1}}
-                        <a class="nav-link" href="/user/logout" aria-disabled="true" tabindex="-1">Logout</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Admin
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" href="/admin/dashboard">Dashboard</a>
+                                <a class="dropdown-item" href="/user/logout">Logout</a>
+                            </div>
+                        </li>
                     {{else}}
                         <a class="nav-link" href="/user/login" aria-disabled="true" tabindex="-1">Login</a>
                     {{end}}
@@ -89,7 +97,7 @@
             crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.2/dist/js/datepicker-full.min.js"></script>
     <script src="https://unpkg.com/notie"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="/static/js/app.js"></script>
 
     {{block "js" .}}

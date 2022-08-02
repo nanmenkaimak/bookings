@@ -1,6 +1,6 @@
 // Prompt is our JS module for all alerts, notifications and custom popup dialogs
 function Prompt() {
-    let toast = function (c) {
+    let toast = function (c) { 
         const{
             msg = '',
             icon = 'success',
@@ -83,12 +83,6 @@ function Prompt() {
                     c.didOpen();
                 }
             },
-            preConfirm: () => {
-                return [
-                    document.getElementById('start').value,
-                    document.getElementById('end').value
-                ]
-            }
         })
         
         if(result){
