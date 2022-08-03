@@ -149,6 +149,10 @@
     <script src="/static/admin/js/dashboard.js"></script>
     <!-- End custom js for this page-->
 
+    {{block "js" . }}
+
+    {{end}}
+
     <script>
         let attention = Prompt()
         
@@ -178,9 +182,7 @@
         notify("{{.}}", "warning")
         {{end}}
     </script>
-    {{block "js" . }}
 
-    {{end}}
     </body>
 
     </html>
